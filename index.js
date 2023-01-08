@@ -17,7 +17,22 @@ connect.then(() => {
         .then((dish) => {
             console.log(dish);
 
-            return Dishes.find({});
+            return Dishes.findByIdAndUpdate(dish._id, {
+                $set : {description : 'Updated test'}
+            },{
+                new : true
+            }).exec();
+        })
+        .then((dish) =>{
+            console.log(dish);
+
+            dish.comment.push({
+                rating : 5,
+                comment : 'I\'m getting a sinking feeling!',
+                author: 'Leonardo di Carpaccio'
+            });
+
+            return dish.save();
         })
         .then((dishes) => {
             console.log(dishes);
@@ -25,7 +40,7 @@ connect.then(() => {
             return Dishes.remove({});
         })
         .then(() => {
-            mongoose.connection.close();
+            return mongoose.connection.close();
         })
         .catch((err) => {
             console.log(err);
